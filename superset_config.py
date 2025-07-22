@@ -3,10 +3,9 @@ import os
 # SECRET_KEY from environment variable
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# Database configuration for Heroku Postgres
-# SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '').replace('postgres://', 'postgresql://')
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL and DATABASE_URL.startswith('postgres://'):
+    DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
 
-# Other Heroku-friendly settings
-# WTF_CSRF_ENABLED = True
-# SUPERSET_WEBSERVER_PORT = int(os.environ.get('PORT', 8088))
-
+SQLALCHEMY_DATABASE_URI = DATABASE_URL
+SQLALCHEMY_TRACK_MODIFICATIONS = False
