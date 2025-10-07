@@ -27,11 +27,9 @@ import {
   Ref,
   useState,
 } from 'react';
-import { merge } from 'lodash';
-
 import { useSelector } from 'react-redux';
 
-import { styled, useTheme } from '@superset-ui/core';
+import { styled, useTheme, mergeReplaceArrays } from '@superset-ui/core';
 import { use, init, EChartsType, registerLocale } from 'echarts/core';
 import {
   SankeyChart,
@@ -131,6 +129,7 @@ function Echart(
     zrEventHandlers,
     selectedValues = {},
     refs,
+    vizType,
   }: EchartsProps,
   ref: Ref<EchartsHandler>,
 ) {
@@ -174,6 +173,8 @@ function Echart(
       if (!chartRef.current) {
         chartRef.current = init(divRef.current, null, { locale });
       }
+      // did mount
+      handleSizeChange({ width, height });
       setDidMount(true);
     });
   }, [locale]);
@@ -202,6 +203,12 @@ function Echart(
           },
           legend: {
             textStyle: { color: antdTheme.colorTextSecondary },
+            pageTextStyle: {
+              color: antdTheme.colorTextSecondary,
+            },
+            pageIconColor: antdTheme.colorTextSecondary,
+            pageIconInactiveColor: antdTheme.colorTextDisabled,
+            inactiveColor: antdTheme.colorTextDisabled,
           },
           tooltip: {
             backgroundColor: antdTheme.colorBgContainer,
@@ -229,15 +236,20 @@ function Echart(
         return echartsTheme;
       };
 
-      const themedEchartOptions = merge(
-        {},
-        getEchartsTheme(echartOptions),
-        echartOptions,
-      );
-      chartRef.current?.setOption(themedEchartOptions, true);
+      const baseTheme = getEchartsTheme(echartOptions);
+      const globalOverrides = theme.echartsOptionsOverrides || {};
+      const chartOverrides = vizType
+        ? theme.echartsOptionsOverridesByChartType?.[vizType] || {}
+        : {};
 
-      // did mount
-      handleSizeChange({ width, height });
+      const themedEchartOptions = mergeReplaceArrays(
+        baseTheme,
+        echartOptions,
+        globalOverrides,
+        chartOverrides,
+      );
+
+      chartRef.current?.setOption(themedEchartOptions, true);
     }
   }, [didMount, echartOptions, eventHandlers, zrEventHandlers, theme]);
 

@@ -16,23 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {
+import { FormatLocaleDefinition } from 'd3-format';
+import { TimeLocaleDefinition } from 'd3-time-format';
+import { isPlainObject } from 'lodash';
+import { Languages } from 'src/features/home/LanguagePicker';
+import type {
+  AnyThemeConfig,
   ColorSchemeConfig,
   FeatureFlagMap,
   JsonObject,
   LanguagePack,
   Locale,
   SequentialSchemeConfig,
-} from '@superset-ui/core';
-import { FormatLocaleDefinition } from 'd3-format';
-import { TimeLocaleDefinition } from 'd3-time-format';
-import { isPlainObject } from 'lodash';
-import { Languages } from 'src/features/home/LanguagePicker';
-import type { FlashMessage } from 'src/components';
-import type {
-  AnyThemeConfig,
   SerializableThemeConfig,
-} from '@superset-ui/core/theme/types';
+} from '@superset-ui/core';
 
 export type User = {
   createdOn?: string;
@@ -147,22 +144,15 @@ export interface MenuData {
   };
 }
 
-export interface SerializableThemeSettings {
-  enforced?: boolean;
-  allowSwitching?: boolean;
-  allowOSPreference?: boolean;
-}
-
 export interface BootstrapThemeDataConfig {
   default: SerializableThemeConfig | {};
   dark: SerializableThemeConfig | {};
-  settings: SerializableThemeSettings | {};
+  enableUiThemeAdministration?: boolean;
 }
 
 export interface CommonBootstrapData {
   application_root: string;
   static_assets_prefix: string;
-  flash_messages: FlashMessage[];
   conf: JsonObject;
   locale: Locale;
   feature_flags: FeatureFlagMap;
@@ -173,6 +163,7 @@ export interface CommonBootstrapData {
   menu_data: MenuData;
   d3_format: Partial<FormatLocaleDefinition>;
   d3_time_format: Partial<TimeLocaleDefinition>;
+  pdf_compression_level: 'NONE' | 'FAST' | 'MEDIUM' | 'SLOW';
 }
 
 export interface BootstrapData {
@@ -188,8 +179,7 @@ export interface BootstrapData {
 export interface BootstrapThemeData {
   bootstrapDefaultTheme: AnyThemeConfig | null;
   bootstrapDarkTheme: AnyThemeConfig | null;
-  bootstrapThemeSettings: SerializableThemeSettings | null;
-  hasBootstrapThemes: boolean;
+  hasCustomThemes: boolean;
 }
 
 export function isUser(user: any): user is User {

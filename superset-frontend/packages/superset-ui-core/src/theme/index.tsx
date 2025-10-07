@@ -26,7 +26,9 @@ import {
   type ThemeStorage,
   type ThemeControllerOptions,
   type ThemeContextType,
+  type SupersetThemeConfig,
   ThemeAlgorithm,
+  ThemeMode,
 } from './types';
 
 export {
@@ -58,15 +60,21 @@ export function useTheme() {
 
 const styled: CreateStyled = emotionStyled;
 
-// launching in in dark mode for now while iterating
-const themeObject: Theme = Theme.fromConfig({
-  algorithm: ThemeAlgorithm.DEFAULT,
-});
+const themeObject: Theme = Theme.fromConfig();
 
 const { theme } = themeObject;
 const supersetTheme = theme;
 
-export { Theme, themeObject, styled, theme, supersetTheme };
+export {
+  Theme,
+  ThemeAlgorithm,
+  ThemeMode,
+  themeObject,
+  styled,
+  theme,
+  supersetTheme,
+};
+
 export type {
   SupersetTheme,
   SerializableThemeConfig,
@@ -74,6 +82,7 @@ export type {
   ThemeStorage,
   ThemeControllerOptions,
   ThemeContextType,
+  SupersetThemeConfig,
 };
 
 // Export theme utility functions

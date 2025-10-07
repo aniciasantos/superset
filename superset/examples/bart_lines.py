@@ -38,7 +38,7 @@ def load_bart_lines(only_metadata: bool = False, force: bool = False) -> None:
 
         if not only_metadata and (not table_exists or force):
             df = read_example_data(
-                "bart-lines.json.gz", encoding="latin-1", compression="gzip"
+                "examples://bart-lines.json.gz", encoding="latin-1", compression="gzip"
             )
             df["path_json"] = df.path.map(json.dumps)
             df["polyline"] = df.path.map(polyline.encode)
@@ -59,7 +59,7 @@ def load_bart_lines(only_metadata: bool = False, force: bool = False) -> None:
                 index=False,
             )
 
-    logger.debug(f"Creating table {tbl_name} reference")
+    logger.debug("Creating table %s reference", tbl_name)
     table = get_table_connector_registry()
     tbl = db.session.query(table).filter_by(table_name=tbl_name).first()
     if not tbl:

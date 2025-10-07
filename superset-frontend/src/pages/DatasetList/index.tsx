@@ -82,6 +82,7 @@ const DatasetDeleteRelatedExtension = extensionsRegistry.get(
 const FlexRowContainer = styled.div`
   align-items: center;
   display: flex;
+  gap: ${({ theme }) => theme.sizeUnit}px;
 
   svg {
     margin-right: ${({ theme }) => theme.sizeUnit}px;
@@ -90,7 +91,7 @@ const FlexRowContainer = styled.div`
 
 const Actions = styled.div`
   ${({ theme }) => css`
-    color: ${theme.colors.grayscale.base};
+    color: ${theme.colorIcon};
 
     .disabled {
       svg,
@@ -101,12 +102,12 @@ const Actions = styled.div`
           }
         }
       }
-      color: ${theme.colors.grayscale.light1};
+      color: ${theme.colorTextDisabled};
       .ant-menu-item:hover {
         cursor: default;
       }
       &::after {
-        color: ${theme.colors.grayscale.light1};
+        color: ${theme.colorTextDisabled};
       }
     }
   `}
@@ -358,13 +359,13 @@ const DatasetList: FunctionComponent<DatasetListProps> = ({
         Header: t('Type'),
         accessor: 'kind',
         disableSortBy: true,
-        size: 'md',
+        size: 'sm',
         id: 'kind',
       },
       {
         Header: t('Database'),
         accessor: 'database.database_name',
-        size: 'lg',
+        size: 'xl',
         id: 'database.database_name',
       },
       {

@@ -17,7 +17,7 @@
 import logging
 from typing import Any
 
-from flask import current_app
+from flask import current_app as app
 
 from superset.commands.base import BaseCommand
 from superset.daos.theme import ThemeDAO
@@ -36,9 +36,9 @@ class SeedSystemThemesCommand(BaseCommand):
         """Seed system themes defined in application configuration."""
 
         themes_to_seed = []
-        if theme_default := current_app.config.get("THEME_DEFAULT"):
+        if theme_default := app.config.get("THEME_DEFAULT"):
             themes_to_seed.append(("THEME_DEFAULT", theme_default))
-        if theme_dark := current_app.config.get("THEME_DARK"):
+        if theme_dark := app.config.get("THEME_DARK"):
             themes_to_seed.append(("THEME_DARK", theme_dark))
 
         for theme_name, theme_config in themes_to_seed:
@@ -59,10 +59,9 @@ class SeedSystemThemesCommand(BaseCommand):
                     theme_config = json.loads(referenced_theme.json_data)
                     # Add a note about the theme being copied from UUID reference
                     theme_config["NOTE"] = (
-                        f"Copied at startup from theme UUID {original_uuid} "
-                        f"based on config reference"
-                    )
-                    logger.info(
+                        "Copied at startup from theme UUID %s based on config reference"
+                    ) % original_uuid
+                    logger.debug(
                         "Copied theme definition from UUID %s for system theme %s",
                         original_uuid,
                         theme_name,
@@ -93,7 +92,7 @@ class SeedSystemThemesCommand(BaseCommand):
 
         if existing_theme:
             existing_theme.json_data = json_data
-            logger.info(f"Updated system theme: {theme_name}")
+            logger.debug("Updated system theme: %s", theme_name)
         else:
             new_theme = Theme(
                 theme_name=theme_name,
@@ -101,7 +100,7 @@ class SeedSystemThemesCommand(BaseCommand):
                 is_system=True,
             )
             db.session.add(new_theme)
-            logger.info(f"Created system theme: {theme_name}")
+            logger.debug("Created system theme: %s", theme_name)
 
     def validate(self) -> None:
         """Validate that the command can be executed."""

@@ -48,6 +48,8 @@ import {
   deckGLLinearColorSchemeSelect,
   deckGLColorBreakpointsSelect,
   breakpointsDefaultColor,
+  tooltipContents,
+  tooltipTemplate,
 } from '../../utilities/Shared_DeckGL';
 import { dndLineColumn } from '../../utilities/sharedDndControls';
 
@@ -89,6 +91,8 @@ const config: ControlPanelConfig = {
         ['row_limit'],
         [reverseLongLat],
         [filterNulls],
+        [tooltipContents],
+        [tooltipTemplate],
       ],
     },
     {
@@ -181,32 +185,6 @@ const config: ControlPanelConfig = {
                 'List of n+1 values for bucketing metric into n buckets.',
               ),
               renderTrigger: true,
-            },
-          },
-        ],
-        [
-          {
-            name: 'table_filter',
-            config: {
-              type: 'CheckboxControl',
-              label: t('Emit Filter Events'),
-              renderTrigger: true,
-              default: false,
-              description: t('Whether to apply filter when items are clicked'),
-            },
-          },
-        ],
-        [
-          {
-            name: 'toggle_polygons',
-            config: {
-              type: 'CheckboxControl',
-              label: t('Multiple filtering'),
-              renderTrigger: true,
-              default: true,
-              description: t(
-                'Allow sending multiple polygons as a filter event',
-              ),
             },
           },
         ],

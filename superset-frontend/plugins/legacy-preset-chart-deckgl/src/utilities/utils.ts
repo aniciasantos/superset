@@ -28,8 +28,6 @@ export const COLOR_SCHEME_TYPES = {
 export type ColorSchemeType =
   (typeof COLOR_SCHEME_TYPES)[keyof typeof COLOR_SCHEME_TYPES];
 
-/* eslint camelcase: 0 */
-
 export function formatSelectOptions(options: (string | number)[]) {
   return options.map(opt => [opt, opt.toString()]);
 }
@@ -38,3 +36,19 @@ export const isColorSchemeTypeVisible = (
   controls: ControlStateMapping,
   colorSchemeType: ColorSchemeType,
 ) => controls.color_scheme_type?.value === colorSchemeType;
+
+export const isPointInBonds = (
+  position: [number, number],
+  area: [[number, number], [number, number]],
+) => {
+  const [lon, lat] = position;
+  const fromLonLat = area[0];
+  const toLatLon = area[1];
+
+  return (
+    lon >= fromLonLat[0] &&
+    lon <= toLatLon[0] &&
+    lat >= fromLonLat[1] &&
+    lat <= toLatLon[1]
+  );
+};
